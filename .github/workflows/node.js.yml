@@ -26,7 +26,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm install 
-    - run: node /src/index.js
+    - run: node ./src/index.js
     env:
         COOKIE: ${{ secrets.COOKIE }}
         FEISHU_ROBOT: ${{ secrets.FEISHU_ROBOT }}
