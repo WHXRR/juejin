@@ -1,5 +1,7 @@
 const axios = require('axios')
-const { url, Cookie } = require('../utils/index.js')
+const { url, Cookie } = require('../config/index.js')
+const email = require('../utils/email.js')
+const formatter = require('../utils/format.js')
 
 const signIn = async () => {
   const res = await axios.post(
@@ -12,14 +14,25 @@ const signIn = async () => {
     }
   )
   if (res && res.data) {
+    let message = ''
+    let type = 'info'
     if (res.data.err_no == 0) {
+      message = `掘金签到结果,获得: ${res.data.data.incr_point} 矿石`
       console.log(`掘金签到结果,获得: ${res.data.data.incr_point} 矿石`)
       setTimeout(() => {
         lotteryFreeCheck();
       }, Math.random() * 5 * 1000)
     } else {
-      console.log(`掘金签到结果`, { '签到失败': res.data });
+      console.log(`掘金签到结果`, { '签到失败': res.data.err_msg });
+      type = 'error'
+      message = `掘金签到结果,失败: ${res.data.err_msg}`
     }
+    email(
+      formatter(type, message, {
+        style: 'html',
+        bold: true,
+      })
+    )
   }
 }
 
@@ -49,12 +62,22 @@ const lotteryDraw = async () => {
       }
     }
   );
+  let message = ''
+  let type = 'info'
   if (res && res.data) {
     console.log(`抽奖成功，获得：${res.data.data.lottery_name}`);
+    message = `抽奖成功，获得：${res.data.data.lottery_name}`
   } else {
     console.log(res);
     console.log(`抽奖失败`);
+    message = `抽奖失败`
   }
+  email(
+    formatter(type, message, {
+      style: 'html',
+      bold: true,
+    })
+  )
 }
 
 signIn()

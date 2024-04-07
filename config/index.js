@@ -9,5 +9,6 @@ module.exports = {
     feishu_Robot: process.env.FEISHU_ROBOT,
   },
   Cookie: process.env.COOKIE,
-  secret: process.env.SECRET,
+  EMAIL: process.env.EMAIL,
+  AUTHORIZATION_CODE: process.env.AUTHORIZATION_CODE,
 }
