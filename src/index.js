@@ -16,16 +16,22 @@ const signIn = async () => {
   if (res && res.data) {
     let message = ''
     let type = 'info'
-    if (res.data.err_no == 0) {
+    if (res.data.err_no === 0 && res.data.data && res.data.data.incr_point) {
       message = `掘金签到结果,获得: ${res.data.data.incr_point} 矿石`
       console.log(`掘金签到结果,获得: ${res.data.data.incr_point} 矿石`)
       setTimeout(() => {
         lotteryFreeCheck();
       }, Math.random() * 5 * 1000)
     } else {
-      console.log(`掘金签到结果`, { '签到失败': res.data.err_msg });
+      let msg = ''
+      if (res.data.data) {
+        msg = res.data.data.err_msg
+      } else {
+        msg = res.data.err_msg
+      }
+      console.log(`掘金签到结果`, { '签到失败': msg });
       type = 'error'
-      message = `掘金签到结果,失败: ${res.data.err_msg}`
+      message = `掘金签到结果,失败: ${msg}`
     }
     email(
       formatter(type, message, {
